@@ -1,0 +1,151 @@
+<html><head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Computer Graphics I - Assignment3</title>
+</head>
+
+<body>
+
+<center><center>
+<h2><font face="Arial">Computer Graphics I</font></h2>
+</center><center>
+<h3><font face="Arial">4003-570 / 4005-761</font></h3>
+<h3 style="font-family: Arial">Assignment #3: Clipping</h3>
+</center></center><hr size="2" width="100%">
+<p><span style="font-weight: bold; font-family: Arial">Date posted: March 28th 
+2013 <br>
+<br>
+Due date: April 4th 2013 </span></p>
+<p><span style="font-weight: bold; font-family: Arial">Submit to the 
+appropriate dropbox on myCourses.</span></p>
+<hr style="width: 100%; height: 2px">
+<p style="color: rgb(0, 0, 0); font-family: Arial; font-style: normal; font-variant: normal; font-weight: 700; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+<font size="3">Purpose:</font></p>
+<div style="color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; ">
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	In this assignment, you will implement the Sutherland-Hodgman Clipping 
+	Algorithm presented in class.</p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-style: normal; font-variant: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	<b><font size="3">Goals:</font></b></p>
+	<ul style="color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px;">
+		<li><font face="Arial" size="3">Improve your understanding of 2D 
+		clipping</font></li><font face="Arial" size="3">
+		</font><li><font face="Arial" size="3">Complete your suite of&nbsp; 2D drawing algorithms that can be included 
+		as part of your midterm.</font></li>
+	</ul>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-style: normal; font-variant: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	<b><font size="3">2D Programming Environment:</font></b></p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	The programming environment that you will use for this assignment, like the 
+	previous 2 assignments, is a set of simple object-oriented classes with 
+	implementations in both Java and C++.&nbsp; You are free to use either of the 
+	implementations.&nbsp; The classes include:</p>
+	<ul style="color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px;">
+		<li><span style="font-family: Courier New"><font size="3">simpleCanvas</font></span><font size="3"><font face="Arial"><span class="Apple-converted-space">&nbsp;</span>&#8211; 
+		a simple 2D canvas that allows the ability to set a pixel.</font></font></li><font size="3">
+		<li><span style="font-family: Courier New">extendedCanvas</span><font face="Arial"><span class="Apple-converted-space">&nbsp;</span>&#8211; 
+		a subclass of </font><font face="Courier New">simpleCanvas</font><font face="Arial"> 
+		that has additional methods used specifically for testing this 
+		assignment.</font></li>
+		<li><font face="Courier New">clipper</font><span style="font-family: Arial"><span class="Apple-converted-space">&nbsp;</span></span><font face="Arial">-- 
+		a simple class that performs the clipping</font></li>
+		</font><li><font size="3"><span style="font-family: Courier New">clipTest</span></font><font face="Arial" size="3"><span class="Apple-converted-space">&nbsp;</span>&#8211; 
+		the main function for the application.</font></li>
+	</ul>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">You can find the files in the content area of myCourses. Look under the 
+resources category. Note that the distribution contains folders for both C++ and 
+Java versions of the programming environment.&nbsp;</p>
+	<p style="color: rgb(0, 0, 0); font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	<font face="Arial">The only class that you will need to modify is the<span class="Apple-converted-space">&nbsp;</span></font><font face="Courier New">clipper</font><span style="font-family: Arial"><span class="Apple-converted-space">&nbsp;</span></span><font face="Arial">class.&nbsp; 
+	For this assignment, you will need to complete the method<span class="Apple-converted-space">&nbsp;</span></font><span style="font-family: Courier New">clipPolygon()</span><font face="Arial">, 
+	implementing the Sutherland-Hodgman Clipping Algorithm.&nbsp;&nbsp; The signature for 
+	the</font><span style="font-family: Arial"> </span><font face="Courier New">
+	clipPolygon</font><font face="Arial"><span class="Apple-converted-space">&nbsp;</span>method 
+	is:</font></p>
+	<p style="color: rgb(0, 0, 0); font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; text-align: center">
+	<span style="font-family: Courier New">int clipPolygon(int in, float inx[], 
+	float iny[], float outx[], float outy[], float x0, float y0, float x1, float 
+	y1)</span></p>
+	<p style="color: rgb(0, 0, 0); font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; text-align: center">&nbsp;</p>
+	<p style="color: rgb(0, 0, 0); font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" align="center">
+	<span style="font-family: Courier New">int clipPolygon(int in, float inx[], 
+	float iny[], float outx[], float outy[], float x0, float y0, float x1, float 
+	y1)</span></p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	Where <font face="Courier New">in</font> is the number of vertices in the 
+	polygon to be clipped, <font face="Courier New">inx</font> and <font face="Courier New">iny</font> 
+	are arrays holding the coordinates of the vertices of the polygon before 
+	clipping, <font face="Courier New">outx</font> and
+	<font face="Courier New">outy</font> are arrays that will hold the 
+	coordinates of the vertices of the polygon after clipping,
+	<font face="Courier New">x0</font> and <font face="Courier New">y0</font> 
+	are the coordinates of the lower left corner of the clipping rectangle and
+	<font face="Courier New">x1</font> and <font face="Courier New">y1</font> 
+	are the coordinates of the upper right corner of the clipping rectangle.<font face="Arial"> 
+	The function should return the number of vertices in the polygon after 
+	clipping. &nbsp; You are free to add additional members and methods to the<span class="Apple-converted-space">&nbsp;</span></font><span style="font-family: Courier New">clipper</span><font face="Arial"><span class="Apple-converted-space">&nbsp;</span>class 
+	as you see fit, and you may also include additional auxiliary classes 
+	(though this is not required).&nbsp; However, you cannot modify any of the other 
+	classes.</font></p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-style: normal; font-variant: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	<b><font size="3">Additional Libraries:</font></b></p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	The Java implementation of the programming environment makes use of the 
+	standard awt and Java2D classes to access the 2D drawing areas, so no 
+	additional libraries or Java files, other than the ones provided by the 
+	assignment are required.</p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	However, since C++ does not have a standard 2D graphics environment, you 
+	will need some additional libraries if you choose to use the C++ 
+	implementation for your submission.&nbsp; &nbsp;The C++ implementation is built on the 
+	SFML (Simple and Fast Multimedia Library), a free, cross-platform and 
+	lightweight library for performing common multimedia tasks.&nbsp;&nbsp; It can be 
+	downloaded at<span class="Apple-converted-space">&nbsp;</span><a href="http://www.sfml-dev.org/download.php">http://www.sfml-dev.org/download.php</a>.&nbsp;&nbsp;&nbsp; 
+	Version 1.6 of the libraries are used.&nbsp; There are precompiled binaries for 
+	Windows, Mac, and Linux.&nbsp;&nbsp; (NOTE: For Windows, there are precompiled 
+	binaries for Visual Studio 2005, and Visual Studio 2008.&nbsp; If you are using 
+	Visual Studio 2010, a precompiled version of the libraries is available in 
+	the content area of myCourses. Look under the resources category.</p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	Please be sure to refer to the installation instructions for your given 
+	platform:</p>
+	<ul style="color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px;">
+		<li><font face="Arial" size="3">Windows (Visual Studio) -<span class="Apple-converted-space">&nbsp;</span><a href="http://www.sfml-dev.org/tutorials/1.6/start-vc.php">http://www.sfml-dev.org/tutorials/1.6/start-vc.php</a></font></li><font face="Arial" size="3">
+		<li>Mac OS X --<span class="Apple-converted-space">&nbsp;</span><a href="http://www.sfml-dev.org/tutorials/1.6/start-osx.php">http://www.sfml-dev.org/tutorials/1.6/start-osx.php</a></li>
+		</font><li><font face="Arial" size="3">Linux --<span class="Apple-converted-space">&nbsp;</span><a href="http://www.sfml-dev.org/tutorials/1.6/start-linux.php">http://www.sfml-dev.org/tutorials/1.6/start-linux.php</a></font></li>
+	</ul>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-style: normal; font-variant: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	<b><font size="3">Submission:</font></b></p>
+	<p style="color: rgb(0, 0, 0); font-family: Times New Roman; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	<font face="Arial">Your submission should only include the files for the<span class="Apple-converted-space">&nbsp;</span></font><font face="Courier New">clipper</font><span style="font-family: Arial"><span class="Apple-converted-space">&nbsp;</span></span><font face="Arial">class 
+	that you have modified and any other auxiliary classes that you have 
+	created.&nbsp; For the Java version, this would mean the file<span class="Apple-converted-space">&nbsp;</span></font><span style="font-family: Courier New">clipper.java</span><font face="Arial"><span class="Apple-converted-space">&nbsp;</span>and 
+	for the C++ version, this means the files<span class="Apple-converted-space">&nbsp;</span></font><span style="font-family: Courier New">clipper.cpp</span><font face="Arial"><span class="Apple-converted-space">&nbsp;</span>and<span class="Apple-converted-space">&nbsp;</span></font><span style="font-family: Courier New">clipper.h</span><font face="Arial">.&nbsp;&nbsp; 
+	PLEASE DO NOT SUBMIT code for<span class="Apple-converted-space">&nbsp;</span></font><span style="font-family: Courier New">simpleCanvas</span><font face="Arial">,<span class="Apple-converted-space">&nbsp;</span></font><span style="font-family: Courier New">extendedCanvas</span><font face="Arial">, 
+	or<span class="Apple-converted-space">&nbsp;</span></font><span style="font-family: Courier New">clipTest</span><font face="Arial"><span class="Apple-converted-space">&nbsp;</span>as 
+	you should not be changing the code for theses classes.</font></p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-style: normal; font-variant: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	<b><font size="3">Grading:</font></b></p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	This assignment is worth 10 points distributed as follows:&nbsp;</p>
+	<ul style="color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-size: medium; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px;">
+		<li><font face="Arial" size="3">5.1 points for submitting<span class="Apple-converted-space"> 
+		code </span>that compiles, runs, and produces a window.</font></li><font face="Arial" size="3">
+		<li>0.7 points for each clipped polygon in the test program.&nbsp; There are 
+		7 such polygons.</li>
+		</font>
+	</ul>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">
+	<font face="Arial" size="3">Note that the correct output for the test 
+	program should look like this:</font></p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px" align="center">
+	<img src="Assignment3_files/clip.jpg" border="0" height="322" width="300"></p>
+	<p style="color: rgb(0, 0, 0); font-family: Arial; font-size: 12pt; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px">&nbsp;</p>
+<hr style="width: 100%; height: 2px">
+</div>
+
+
+
+</body></html>

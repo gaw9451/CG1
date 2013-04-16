@@ -1,0 +1,119 @@
+//
+//  Rasterizer.cpp
+//  
+//  Glenn Wallace
+//
+//  Created by Joe Geigel on 11/30/11.
+//  Copyright 2011 Rochester Institute of Technology. All rights reserved.
+//
+
+
+
+#include <iostream>
+#include "Rasterizer.h"
+#include "simpleCanvas.h"
+
+using namespace std;
+
+/**
+ *
+ * Simple class that performs rasterization algorithms
+ *
+ */
+
+struct EdgeBucket {
+	int ymax;
+	int x;
+	int dx;
+	int dy;
+	int sum;
+	EdgeBucket* link;
+};
+
+void insertEdge( int ymin, EdgeBucket* newEdge, EdgeBucket** edgeTable ) {
+	if( edgeTable[ ymin ] == 0 ) {
+		edgeTable[ ymin ] = newEdge;
+	} else {
+		bool done = false;
+		EdgeBucket* curr = edgeTable[ ymin ];
+		while( curr != 0 && !done ) {
+			if( curr->link == 0 && curr->x < newEdge->x ) {
+				curr->link = newEdge;
+			}
+			else if( curr->link == 0 || ( curr->x < newEdge->x && curr->link->x > newEdge->x ) ) {
+				newEdge->link = curr->link;
+				curr->link = newEdge;
+				done = true;
+			}
+		}
+	}
+
+}
+
+/**
+ * Constructor
+ *
+ * @param n - number of scanlines
+ *
+ */
+Rasterizer::Rasterizer (int n) : n_scanlines (n)
+{
+}
+
+/**
+ * Draw a filled polygon in the simpleCanvas C.
+ *
+ * The polygon has n distinct vertices. The 
+ * coordinates of the vertices making up the polygon are stored in the 
+ * x and y arrays.  The ith vertex will have coordinate  (x[i], y[i])
+ *
+ * You are to add the implementation here using only calls
+ * to C.setPixel()
+ */
+void Rasterizer::drawPolygon(int n, int x[], int y[], simpleCanvas &C)
+{     
+	EdgeBucket* edgeTable[ n_scanlines ];
+	EdgeBucket* edges[ n ];
+	
+	/*clear the edge table initially*/
+	for( int i = 0; i < n_scanlines; i++ ) {
+		edgeTable[ i ] = 0;
+	}
+
+	/*populate the edge table with edges*/
+	for( int i = 0; i < n; i++ ) {
+		if( y[ i ] != y[ ( i + 1 ) % n ] ) {
+			EdgeBucket* newEdge = new EdgeBucket;
+			int ymax;
+			int minVertex;
+			int maxVertex;
+			if( y[ i ] > y[ ( i + 1 ) % n ] ) {
+				ymax = y[ i ];
+				minVertex = ( i + 1 ) % n;
+				maxVertex = i;
+			} else {
+				ymax = y[ ( i + 1 ) % n ];
+				minVertex =  i;
+				maxVertex = ( i + 1 ) % n;
+			}
+			newEdge->ymax = ymax;
+			newEdge->x = x[ minVertex ];
+			newEdge->dx = x[ maxVertex ] - x[ minVertex ];
+			newEdge->dy = y[ maxVertex ] - y[ minVertex ];
+			newEdge->sum = 0;
+			newEdge->link = 0;
+			edges[ i ] = newEdge;
+			insertEdge( y[ minVertex ], newEdge, edgeTable );
+		} else {
+			edges[ i ] = 0;
+		}
+		
+	}
+
+	/*delete the edges*/
+	for( int i = 0; i < n; i++ ) {
+		if( edges[ i ] != 0 ) {
+			delete edges[ i ];
+		}
+	}
+}
