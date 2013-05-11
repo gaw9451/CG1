@@ -18,13 +18,18 @@
 #include "simpleShape.h"
 #include <math.h>
 
-
+#define PI ( 4 * atan( 1 ) )
 
 /**
  * makeDefaultShape - creates a "unit" shape of your choice using your tesselation routines.
 */
 void makeDefaultShape ()
 {
+	float radius = 1;
+	float stacks = 10;
+	float slices = 10;
+	float step1 = PI/stacks;
+	float step2 = 2.0*PI/slices;
     // tesselate your favorite shape here.
 	/*top hemisphere*/
 	for( int i = 0; i < stacks; i++ ) {
@@ -47,5 +52,6 @@ void makeDefaultShape ()
 			addTriangle( x1, y1, z1, x3, y3, z3, x4, y4, z4 );
 		}
 	}
+	
 }
     
