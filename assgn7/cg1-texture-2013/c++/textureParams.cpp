@@ -34,6 +34,11 @@
  */
 void loadTexture (char *filename)
 {
+	GLuint tex_2d = SOIL_load_OGL_texture( "texture.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_TEXTURE_REPEATS );
+
+	if( tex_2d == 0 ) {
+		printf( "SOIL loading error: '%s'\n", SOIL_last_result() );
+	}
 }
 
 /**
@@ -49,6 +54,12 @@ void loadTexture (char *filename)
  */
 void setUpTexture (GLuint program)
 {
+	glUseProgram( program );
+	GLint baseImageLoc = glGetUniformLocation( program, "baseImage" );
+	GLint normalMapLoc = glGetUniformLocation( program, "normalMap" );
+	GLint shadowMapLoc = glGetUniformLocation( program, "shadowMap" );
+
+
 }
 
 
