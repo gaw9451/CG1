@@ -23,6 +23,10 @@ GLfloat lightcolor[4] = {1.0, 1.0, 0.0, 1.0};
 
 GLfloat diffuse[4] = {0.89, 0.0, 0.0, 1.0};
 
+GLfloat exponent = 10.0;
+
+GLfloat specColor[4] = {1.0, 1.0, 1.0, 1.0};
+
 
 /**
  * This functions sets up the lighting, material, and shading parameters 
@@ -37,17 +41,21 @@ GLfloat diffuse[4] = {0.89, 0.0, 0.0, 1.0};
  */
 void setUpPhong (GLuint program)
 {
-    // Here's code for the diffuse component.
+    /* Here's code for the diffuse component.*/
     GLuint light = glGetUniformLocation( program , "lightPosition" );
     GLuint lightc = glGetUniformLocation( program , "lightColor" );
     GLuint diff = glGetUniformLocation( program , "diffuseColor" );
+
+    /* The specular component*/
+    GLuint spherec = glGetUniformLocation( program, "specColor" );
+    GLuint sphereExp = glGetUniformLocation( program, "specExp" );
    
     glUniform4fv( light , 1 , lightpos );
     glUniform4fv( lightc , 1 , lightcolor );
     glUniform4fv( diff , 1 , diffuse );
        
-    // You need to add code for the specular component
-
+    glUniform1f( sphereExp, exponent );
+    glUniform4fv( spherec, 1, specColor );
 }
 
 

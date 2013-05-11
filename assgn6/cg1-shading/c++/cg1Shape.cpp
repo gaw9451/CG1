@@ -13,7 +13,7 @@
 #include <OPENGL/gl.h>
 #else
 #include <GL/glew.h>
-#include <GL/GLU.h>
+//#include <GL/GLU.h>
 #include <GL/gl.h>
 #endif
 

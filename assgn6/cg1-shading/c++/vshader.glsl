@@ -8,6 +8,11 @@ attribute vec3 vNormal;
 // Light position is given in world space
 uniform vec4 lightPosition;
 
+// Specular exponent for sphere
+uniform float specExp;
+
+// Specular color for sphere
+uniform vec4 specColor;
 
 // Vectors to "attach" to vertex and get sent to fragment shader
 // Vectors and points will be passed in "eye" space
@@ -58,6 +63,7 @@ void main()
     lPos = lightInEye.xyz;
     vPos = vertexInEye.xyz;
     vNorm = normalInEye.xyz;
+    
     
     // convert to clip space (like a vertex shader should)
     gl_Position =  projMatrix * viewMatrix * modelMatrix * vPosition;
